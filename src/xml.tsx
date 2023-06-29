@@ -482,6 +482,10 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         }
       }
 
+      if (name === 'id' && typeof value === 'number') {
+        value = value.toString();
+      }
+
       props[camelCase(name)] = value;
     }
   }

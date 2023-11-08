@@ -112,8 +112,10 @@ const names: (keyof typeof examples)[] = [
   'TouchEvents',
   'PanResponder',
   'Reusable',
+  'Reanimated',
   'Transforms',
   'Markers',
+  'Mask',
 ];
 
 const initialState = {

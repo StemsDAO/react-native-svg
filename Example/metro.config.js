@@ -1,5 +1,11 @@
-/* eslint-disable import/no-commonjs */
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
 const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const escape = require('escape-string-regexp');
@@ -12,9 +18,13 @@ const rnwPath = fs.realpathSync(
   path.resolve(require.resolve('react-native-windows/package.json'), '..'),
 );
 
-const modules = [...Object.keys(pack.peerDependencies), 'react-native-windows'];
+const modules = [
+  ...Object.keys(pack.peerDependencies),
+  'react-native-windows',
+  'react-native-macos',
+];
 
-module.exports = {
+const config = {
   projectRoot: __dirname,
   watchFolders: [root],
 
@@ -30,6 +40,7 @@ module.exports = {
       new RegExp(
         `${path.join(__dirname, 'windows').replace(/[/\\]+/g, '/')}.*`,
       ),
+      new RegExp(`${path.join(__dirname, 'macos').replace(/[/\\]+/g, '/')}.*`),
       // This prevents "react-native run-windows" from hitting: EBUSY: resource busy or locked, open msbuild.ProjectImports.zip or other files produced by msbuild
       new RegExp(`${rnwPath}/build/.*`),
       new RegExp(`${rnwPath}/target/.*`),
@@ -51,3 +62,5 @@ module.exports = {
     }),
   },
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
